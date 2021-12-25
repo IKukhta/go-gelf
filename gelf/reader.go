@@ -75,7 +75,7 @@ func (r *Reader) ReadMessage() (*Message, error) {
 
 	for got := 0; got < 128 && (total == 0 || got < int(total)); got++ {
 		if n, err = r.conn.Read(cBuf); err != nil {
-			return nil, fmt.Errorf("Read: %s", err)
+			return nil, fmt.Errorf("read buffer: %w", err)
 		}
 		cHead, cBuf = cBuf[:2], cBuf[:n]
 
@@ -137,4 +137,8 @@ func (r *Reader) ReadMessage() (*Message, error) {
 	}
 
 	return msg, nil
+}
+
+func (r *Reader) Close() error {
+	return r.conn.Close()
 }
